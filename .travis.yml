@@ -1,0 +1,25 @@
+language: go
+
+# We'll test on oldest 1.4 and newest (but not tip)
+go:
+  - 1.4
+  - 1.5.1
+
+os:
+  - linux
+  - osx
+
+addons:
+  apt:
+    packages:
+    - libpcap0.8-dev
+
+install:
+  # TODO: Add coverage to project after adding tests
+  # - go get golang.org/x/tools/cmd/cover
+  - go get -d -v ./...
+
+script:
+  - go tool vet -all -v . || true
+  - go generate -v ./...
+  - go build -v ./...
