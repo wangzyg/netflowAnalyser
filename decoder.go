@@ -1,4 +1,4 @@
-package netflow
+package netflowAnalyser
 
 import (
 	"bytes"
@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/tehmaze/netflow/ipfix"
-	"github.com/tehmaze/netflow/netflow1"
-	"github.com/tehmaze/netflow/netflow5"
-	"github.com/tehmaze/netflow/netflow6"
-	"github.com/tehmaze/netflow/netflow7"
-	"github.com/tehmaze/netflow/netflow9"
-	"github.com/tehmaze/netflow/session"
+	"github.com/wangzyg/netflowAnalyser/ipfix"
+	"github.com/wangzyg/netflowAnalyser/netflow1"
+	"github.com/wangzyg/netflowAnalyser/netflow5"
+	"github.com/wangzyg/netflowAnalyser/netflow6"
+	"github.com/wangzyg/netflowAnalyser/netflow7"
+	"github.com/wangzyg/netflowAnalyser/netflow9"
+	"github.com/wangzyg/netflowAnalyser/session"
+	"net"
 )
 
 // Decoder for NetFlow messages.
@@ -31,7 +32,7 @@ func NewDecoder(s session.Session) *Decoder {
 
 // Read a single Netflow message from the network. If an error is returned,
 // there is no guarantee the following reads will be succesful.
-func (d *Decoder) Read(r io.Reader) (Message, error) {
+func (d *Decoder) Read(r io.Reader, routerAddr *net.UDPAddr) (Message, error) {
 	data := [2]byte{}
 	if _, err := r.Read(data[:]); err != nil {
 		return nil, err
@@ -46,7 +47,7 @@ func (d *Decoder) Read(r io.Reader) (Message, error) {
 		return netflow1.Read(mr)
 
 	case netflow5.Version:
-		return netflow5.Read(mr)
+		return netflow5.Read(mr, routerAddr)
 
 	case netflow6.Version:
 		return netflow6.Read(mr)

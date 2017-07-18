@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tehmaze/netflow/read"
-	"github.com/tehmaze/netflow/session"
+	"github.com/wangzyg/netflowAnalyser/read"
+	"github.com/wangzyg/netflowAnalyser/session"
 )
 
 // IPFIX

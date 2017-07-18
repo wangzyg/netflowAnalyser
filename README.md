@@ -1,5 +1,5 @@
 
-根据 github.com/tehmaze/netflow 项目做了二次开发
+根据 github.com/wangzyg/netflowAnalyser 项目做了二次开发
 
 增加了过滤器
 增加了流量流向分析

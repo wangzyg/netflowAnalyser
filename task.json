@@ -3,9 +3,6 @@
   "Task":[
     {
       "TaskName":"Task001",
-      "routerFilter": {
-        "RouterAddress": [ "127.0.0.1", "127.0.0.2" ]
-      },
       "SourceFilter": {
         "SourceAddress": [ "128.0.0.1", "128.0.0.2" ]
       },

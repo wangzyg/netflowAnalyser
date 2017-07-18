@@ -6,8 +6,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/tehmaze/netflow/read"
-	"github.com/tehmaze/netflow/qqwry"
+	"github.com/wangzyg/netflowAnalyser/read"
+	"github.com/wangzyg/netflowAnalyser/qqwry"
 )
 
 const (
@@ -21,14 +21,14 @@ type Packet struct {
 	Records []*FlowRecord
 }
 
-func (p *Packet) Unmarshal(r io.Reader) error {
+func (p *Packet) Unmarshal(r io.Reader, routerAddr *net.UDPAddr) error {
 	if err := p.Header.Unmarshal(r); err != nil {
 		return err
 	}
 	p.Records = make([]*FlowRecord, p.Header.Count)
 	for i := range p.Records {
 		p.Records[i] = new(FlowRecord)
-		if err := p.Records[i].Unmarshal(r); err != nil {
+		if err := p.Records[i].Unmarshal(r, routerAddr); err != nil {
 			return err
 		}
 	}
@@ -132,13 +132,15 @@ type FlowRecord struct {
 	Pad2 uint16 // 46-47
 
 	IpAddrArea qqwry.ResultQQwry
+
+	RouterAddr *net.UDPAddr
 }
 
 func (r FlowRecord) String() string {
 	return fmt.Sprintf("%s:%d -> %s:%d", r.SrcAddr, r.SrcPort, r.DstAddr, r.DstPort)
 }
 
-func (r *FlowRecord) Unmarshal(h io.Reader) error {
+func (r *FlowRecord) Unmarshal(h io.Reader, routerAddr *net.UDPAddr) error {
 	r.SrcAddr = make(net.IP, 4)
 	if _, err := h.Read(r.SrcAddr); err != nil { // 0-3
 		return err
@@ -203,6 +205,8 @@ func (r *FlowRecord) Unmarshal(h io.Reader) error {
 		return err
 	}
 
+	//为了方便后续统计，将packet中的router写入record中
+	r.RouterAddr = routerAddr
 	return nil
 }
 

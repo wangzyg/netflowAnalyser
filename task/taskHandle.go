@@ -9,6 +9,9 @@ import (
 	"fmt"
 )
 
+
+var Tasks AllTask
+
 /**
 任务结构
  */
@@ -34,8 +37,8 @@ type DestFilter struct{
 	DestAddress []string `json:DestAddress`
 }
 
-func LoadConfig()(config AllTask, err error){
-	path := "./task.json"
+func LoadConfig(taskJson string)(config AllTask, err error){
+	path := taskJson
 	config_file, err := os.Open(path)
 	if err != nil {
 		emit("Failed to open config file '%s': %s\n", path, err)
@@ -73,6 +76,10 @@ func LoadConfig()(config AllTask, err error){
 		fmt.Println(v.RouterFilter.RouterAddress)
 		fmt.Println(v.SourceFilter.SourceAddress)
 		fmt.Println(v.DestFilter.DestAddress)
+
+		if v.RouterFilter.RouterAddress == nil {
+			fmt.Println("-------------------------------")
+		}
 	}
 
 

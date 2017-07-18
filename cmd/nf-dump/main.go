@@ -16,25 +16,25 @@ import (
 	"net"
 	"time"
 	"runtime"
-
-	"github.com/tehmaze/netflow"
-	"github.com/tehmaze/netflow/ipfix"
-	"github.com/tehmaze/netflow/netflow1"
-	"github.com/tehmaze/netflow/netflow5"
-	"github.com/tehmaze/netflow/netflow6"
-	"github.com/tehmaze/netflow/netflow7"
-	"github.com/tehmaze/netflow/netflow9"
-	"github.com/tehmaze/netflow/session"
-	"github.com/tehmaze/netflow/packetCached"
-	"github.com/tehmaze/netflow/qqwry"
-	"github.com/larspensjo/config"
 	"strconv"
-	"github.com/tehmaze/netflow/task"
+
+	"github.com/wangzyg/netflowAnalyser/ipfix"
+	"github.com/wangzyg/netflowAnalyser/netflow1"
+	"github.com/wangzyg/netflowAnalyser/netflow5"
+	"github.com/wangzyg/netflowAnalyser/netflow6"
+	"github.com/wangzyg/netflowAnalyser/netflow7"
+	"github.com/wangzyg/netflowAnalyser/netflow9"
+	"github.com/wangzyg/netflowAnalyser/session"
+	"github.com/wangzyg/netflowAnalyser/packetCached"
+	"github.com/wangzyg/netflowAnalyser/qqwry"
+	"github.com/larspensjo/config"
+	"github.com/wangzyg/netflowAnalyser/task"
+	"github.com/wangzyg/netflowAnalyser"
 )
 
 // Safe default
 var readSize = 2 << 16
-var decoders map[string]*netflow.Decoder
+var decoders map[string]*netflowAnalyser.Decoder
 var analyser_thread_num int = 1
 
 var (
@@ -43,6 +43,7 @@ var (
 	//topic list
 	collect_params = make(map[string]string)
 )
+
 
 func main() {
 	chan_collect := make(chan bool)
@@ -71,7 +72,7 @@ func Init(){
 	//初始化缓存队列
 	packetCached.QueueInit()
 	//初始化路由列表
-	decoders = make(map[string]*netflow.Decoder)
+	decoders = make(map[string]*netflowAnalyser.Decoder)
 
 	//初始化qqwry库
 		datFile := "./qqwry.dat"
@@ -85,7 +86,7 @@ func Init(){
 
 
 func loadTask(){
-	task.LoadConfig()
+	task.Tasks, _ = task.LoadConfig("./task.json")
 }
 
 /**
@@ -187,19 +188,19 @@ func processPacket(p packetCached.UDPPacket, qqWry qqwry.QQwry){
 	d, found := decoders[p.RouterAddr.String()]
 	if !found {
 		s := session.New()
-		d = netflow.NewDecoder(s)
+		d = netflowAnalyser.NewDecoder(s)
 		decoders[p.RouterAddr.String()] = d
 	}
 
-	go makeNetFlow(d, p.Buf, p.Octets, qqWry)
+	go makeNetFlow(d, p.Buf, p.Octets, qqWry, p.RouterAddr)
 }
 
 /**
 构造netflow对象
  */
-func makeNetFlow(d *netflow.Decoder, buf []byte, octets int, qqWry qqwry.QQwry){
+func makeNetFlow(d *netflowAnalyser.Decoder, buf []byte, octets int, qqWry qqwry.QQwry, routerAddr *net.UDPAddr){
 
-	m, err := d.Read(bytes.NewBuffer(buf[:octets]))
+	m, err := d.Read(bytes.NewBuffer(buf[:octets]), routerAddr)
 	if err != nil {
 		log.Println("decoder error:", err)
 		return
@@ -228,5 +229,6 @@ func makeNetFlow(d *netflow.Decoder, buf []byte, octets int, qqWry qqwry.QQwry){
 	case *ipfix.Message:
 		ipfix.Dump(p)
 	}
+
 
 }

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/tehmaze/netflow/qqwry"
+	"github.com/wangzyg/netflowAnalyser/qqwry"
 	"log"
 	"fmt"
 	"reflect"

@@ -1,0 +1,31 @@
+<component name="libraryTable">
+  <library name="GOPATH &lt;netflowAnalyser&gt;">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../../gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../machinery" />
+      <root url="file://$PROJECT_DIR$/../../../golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../groupcache" />
+      <root url="file://$PROJECT_DIR$/../../../gomemcache" />
+      <root url="file://$PROJECT_DIR$/../../../falcon-plus" />
+      <root url="file://$PROJECT_DIR$/../../../gomemcached" />
+      <root url="file://$PROJECT_DIR$/../.." />
+      <root url="file://$PROJECT_DIR$/../../../qqwry" />
+      <root url="file://$PROJECT_DIR$/../../../NetFlowAnalyserForGo" />
+    </CLASSES>
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../../../gopkg.in" />
+      <root url="file://$PROJECT_DIR$/../../../machinery" />
+      <root url="file://$PROJECT_DIR$/../../../golang.org" />
+      <root url="file://$PROJECT_DIR$/../../../groupcache" />
+      <root url="file://$PROJECT_DIR$/../../../gomemcache" />
+      <root url="file://$PROJECT_DIR$/../../../falcon-plus" />
+      <root url="file://$PROJECT_DIR$/../../../gomemcached" />
+      <root url="file://$PROJECT_DIR$/../.." />
+      <root url="file://$PROJECT_DIR$/../../../qqwry" />
+      <root url="file://$PROJECT_DIR$/../../../NetFlowAnalyserForGo" />
+    </SOURCES>
+    <excluded>
+      <root url="file://$PROJECT_DIR$" />
+    </excluded>
+  </library>
+</component>

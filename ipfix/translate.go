@@ -1,8 +1,8 @@
 package ipfix
 
 import (
-	"github.com/tehmaze/netflow/session"
-	"github.com/tehmaze/netflow/translate"
+	"github.com/wangzyg/netflowAnalyser/session"
+	"github.com/wangzyg/netflowAnalyser/translate"
 )
 
 type TranslatedField struct {
